@@ -8,6 +8,8 @@ from controllers.user import user_bp
 from controllers.janitorial import janitorial_bp
 from controllers.auth import auth_bp
 
+from sheets_api import get_google_sheets_data
+
 app=Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
@@ -37,3 +39,38 @@ url_prefix='/api/v1/janitorial')
 
 if __name__ == '__main__':
   app.run(debug=True)
+
+
+/* Gráficos */
+
+  @app.route('/api/solicitacoes')
+def solicitacoes():
+    data = get_google_sheets_data()
+    return jsonify(data)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+    # app.py
+from flask import Flask, jsonify, request
+import requests
+
+app = Flask(__name__)
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    SHEET_ID = '1QlgU_VF_UdBq_ESpdOerW-jvxVtnHAFeFU3FUeV8ZRI' 
+    RANGE = 'Página1'
+    API_KEY = 'AIzaSyCPBtiHtZaPPWoOa0jDVjmEsIdR9s00dJM'
+
+    url = f'https://sheets.googleapis.com/v4/spreadsheets/1QlgU_VF_UdBq_ESpdOerW-jvxVtnHAFeFU3FUeV8ZRI/values/{RANGE}?key=AIzaSyCPBtiHtZaPPWoOa0jDVjmEsIdR9s00dJM'
+    response = requests.get(url) # confirmar se escreve o range pagina1 mesmo
+
+    if response.status_code == 200:
+        data = response.json().get('values', [])
+        return jsonify(data)
+    else:
+        return jsonify({'error': 'Erro ao acessar dados'}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True)

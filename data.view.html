@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Zeladoria - Dados</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Aqui você... </h1> <!-- Pequeno texto explicando o que é possível visualizar aqui a partir dos dados que se seleciona -->
+  
+  <!-- Dropdown para selecionar o tipo de dados -->
+  <label for="data-type">Selecione o Tipo de Dados:</label>
+  <select id="data-type">
+    <option value="servico">Tipo de Serviço</option>
+    <option value="data">Data do Pedido</option>
+    <option value="local">Local da Solicitação</option>
+  </select>
+  
+  <!-- Canvas para o gráfico -->
+  <canvas id="chart" width="400" height="200"></canvas>
+  
+  <script>
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/data');
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
+    }
+
+    function createChart(labels, values) {
+      const ctx = document.getElementById('chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar', // ou 'line', 'pie', etc., conforme preferido
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Quantidade de Solicitações',
+            data: values,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Função para atualizar o gráfico com base na seleção do usuário
+    async function updateChart() {
+      const dataType = document.getElementById('data-type').value;
+      const data = await fetchData();
+
+      let labels = [];
+      let values = [];
+
+      // Exemplo de como mapear dados da planilha para os gráficos (ajuste conforme estrutura de dados)
+      data.forEach(row => {
+        if (dataType === 'servico') {
+          labels.push(row[0]); // Coluna do tipo de serviço
+          values.push(parseInt(row[1])); // Quantidade de solicitações
+        } else if (dataType === 'data') {
+          labels.push(row[2]); // Coluna de data
+          values.push(parseInt(row[1])); // Quantidade de solicitações
+        } else if (dataType === 'local') {
+          labels.push(row[3]); // Coluna de local da solicitação
+          values.push(parseInt(row[1])); // Quantidade de solicitações
+        }
+      });
+
+      createChart(labels, values);
+    }
+
+    // Atualiza o gráfico ao selecionar o tipo de dados
+    document.getElementById('data-type').addEventListener('change', updateChart);
+
+    // Inicializa o gráfico ao carregar a página
+    updateChart();
+  </script>
+</body>
+</html>
