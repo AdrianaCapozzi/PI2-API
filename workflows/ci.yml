@@ -7,9 +7,9 @@ env:
 on:
   push:
     paths:
-      - 'controllers/**'  # CI será executado se arquivos dentro da pasta controllers forem alterados /
-      - 'database/**'     # CI será executado se arquivos dentro da pasta database forem alterados
-      - 'tests/**'        # CI será executado se arquivos de teste forem alterados
+      - 'controllers/**'  # CI será executado se arquivos dentro da pasta controllers forem alterados
+      - 'database/**'     # se arquivos dentro da pasta database forem alterados
+      - 'tests/**'        # se arquivos de teste forem alterados
   pull_request:
     paths:
       - 'controllers/**'
@@ -18,8 +18,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Define o ambiente de execução (Linux Ubuntu)
-
+    runs-on: ubuntu-latest 
     steps:
       - name: Clonar o repositório
         uses: actions/checkout@v3  # Faz o checkout do código da branch atual
