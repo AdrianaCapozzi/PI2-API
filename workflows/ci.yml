@@ -1,0 +1,53 @@
+
+name: CI - Testes, Lint e Verificação de Segurança
+
+env:
+  PYTHON_VERSION: '3.10'
+
+on:
+  push:
+    paths:
+      - 'controllers/**'  # CI será executado se arquivos dentro da pasta controllers forem alterados /
+      - 'database/**'     # CI será executado se arquivos dentro da pasta database forem alterados
+      - 'tests/**'        # CI será executado se arquivos de teste forem alterados
+  pull_request:
+    paths:
+      - 'controllers/**'
+      - 'database/**'
+      - 'tests/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Define o ambiente de execução (Linux Ubuntu)
+
+    steps:
+      - name: Clonar o repositório
+        uses: actions/checkout@v3  # Faz o checkout do código da branch atual
+
+      - name: Configurar o Python
+        uses: actions/setup-python@v4  # Usa a action oficial para configurar a versão do Python
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}  # Usa a variável definida acima
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip  # Atualiza o pip para a última versão
+          pip install -r requirements.txt      # Instala as dependências listadas no requirements.txt
+          pip install pytest flake8 bandit     # Garante que as ferramentas de CI estejam disponíveis
+
+      - name: Rodar testes com pytest
+        run: |
+          pytest tests/  # Executa todos os testes localizados na pasta tests
+
+      - name: Rodar linter com flake8
+        run: |
+          flake8 controllers/ database/  # verifica o estilo de código nas pastas controllers e database
+
+      - name: Verificar segurança com Bandit
+        run: |
+          bandit -r controllers/ database/  # vê se tem vulnerabilidades no código das pastas controllers e database
+
+# Explicação geral:
+# - Esse workflow é ativado apenas se forem feitas mudanças nas pastas controllers/, database/ ou tests/.
+# - Ele instala dependências, roda testes automáticos, verifica padrões de código e analisa segurança.
+# - Garantir estabilidade e qualidade antes de atualizar a branch principal.
