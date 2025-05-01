@@ -46,7 +46,3 @@ jobs:
         run: |
           bandit -r controllers/ database/  # vê se tem vulnerabilidades no código das pastas controllers e database
 
-# Explicação geral:
-# - Esse workflow é ativado apenas se forem feitas mudanças nas pastas controllers/, database/ ou tests/.
-# - Ele instala dependências, roda testes automáticos, verifica padrões de código e analisa segurança.
-# - Garantir estabilidade e qualidade antes de atualizar a branch principal.
