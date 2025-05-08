@@ -1,15 +1,14 @@
-
-name: CI - Testes, Lint e Verificação de Segurança
+nname: CI - Testes, Lint e Verificação de Segurança
 
 env:
-  PYTHON_VERSION: '3.10' # confirmar
+  PYTHON_VERSION: '3.10'
 
 on:
   push:
     paths:
-      - 'controllers/**' 
-      - 'database/**'     
-      - 'tests/**'        
+      - 'controllers/**'
+      - 'database/**'
+      - 'tests/**'
   pull_request:
     paths:
       - 'controllers/**'
@@ -18,31 +17,27 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - name: Clonar o repositório
-        uses: actions/checkout@v3  
+        uses: actions/checkout@v3
 
       - name: Configurar o Python
-        uses: actions/setup-python@v4 
+        uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}  # ajustar
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Instalar dependências
         run: |
-          python -m pip install --upgrade pip  
-          pip install -r requirements.txt      
-          pip install pytest flake8 bandit     
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest flake8 bandit
 
       - name: Rodar testes com pytest
-        run: |
-          pytest tests/  
+        run: pytest tests/
 
       - name: Rodar linter com flake8
-        run: |
-          flake8 controllers/ database/  # verifica o estilo de código nas pastas controllers e database
+        run: flake8 controllers/ database/
 
       - name: Verificar segurança com Bandit
-        run: |
-          bandit -r controllers/ database/  # vê se tem vulnerabilidades no código das pastas controllers e database
-
+        run: bandit -r controllers/ database/
