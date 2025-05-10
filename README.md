@@ -276,3 +276,14 @@ Endpoint para deletar um funcionário pelo id.
 api/v1/employee/<int:id>
 ```
 
+### Integração Contínua (CI)
+
+![CI - Testes, Lint e Segurança](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/ci.yml/badge.svg)
+
+Fluxo de Integração Contínua (CI) configurado com o GitHub Actions. O workflow está definido no arquivo `.github/workflows/ci.yml` e é acionado automaticamente a cada `push` ou `pull request` que altera os diretórios `controllers/`, `database/` ou `tests/`.
+
+As etapas automatizadas incluem:
+
+**Execução de testes** com `pytest`
+**Verificação de estilo** com `flake8`
+**Análise de segurança** com `bandit`
