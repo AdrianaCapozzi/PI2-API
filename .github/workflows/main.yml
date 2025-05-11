@@ -1,0 +1,12 @@
+on:
+  push:
+    paths:
+      - 'controllers/**'
+      - 'database/**'
+      - 'tests/**'
+  pull_request:
+    paths:
+      - 'controllers/**'
+      - 'database/**'
+      - 'tests/**'
+  workflow_dispatch:
