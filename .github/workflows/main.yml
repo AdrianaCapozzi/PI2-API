@@ -1,5 +1,4 @@
-name: [CI - Testes, Lint e Segurança](https://github.com/adrianacapozzi/pi2-api/actions/workflows/ci.yml/badge.svg)
-
+name: CI
 
 env:
   PYTHON_VERSION: '3.10'
