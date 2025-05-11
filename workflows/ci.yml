@@ -18,8 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Clonar o repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v3
 
       - name: Configurar o Python
@@ -33,10 +34,10 @@ jobs:
           pip install -r requirements.txt
           pip install pytest flake8 bandit
 
-      - name: Rodar testes com pytest
+      - name: Executar testes com pytest
         run: pytest tests/
 
-      - name: Rodar linter com flake8
+      - name: Executar linter com flake8
         run: flake8 controllers/ database/
 
       - name: Verificar segurança com Bandit
